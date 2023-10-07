@@ -58,27 +58,29 @@ class Slate {
 	redraw() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		this.ctx.save();
-
-		this.ctx.translate(this.origin.x, this.origin.y);
-		this.ctx.scale(this.zoomLevel, this.zoomLevel);
-
 		this.drawPaths.forEach((path) => {
+			this.ctx.save();
+			
 			switch (path.type) {
 				case "start":
+					this.ctx.translate(this.origin.x - path.translate.x, this.origin.y - path.translate.y);
+					this.ctx.scale(this.zoomLevel / path.scale, this.zoomLevel / path.scale);
 					this.ctx.beginPath();
 					this.ctx.moveTo(path.x, path.y);
 					break;
-				case "draw":
+					case "draw":
+					this.ctx.translate(this.origin.x - path.translate.x, this.origin.y - path.translate.y);
+					this.ctx.scale(this.zoomLevel / path.scale, this.zoomLevel / path.scale);
 					this.ctx.lineTo(path.x, path.y);
 					this.ctx.stroke();
 					break;
 				default:
 					this.ctx.closePath();
 			}
+
+			this.ctx.restore();
 		});
 
-		this.ctx.restore();
 	}
 
 	// Pan
@@ -124,6 +126,8 @@ class Slate {
 			type: "start",
 			x: e.touches[0].clientX + this.origin.x,
 			y: e.touches[0].clientY + this.origin.y,
+			translate: { x: this.origin.x, y: this.origin.y },
+			scale: this.zoomLevel,
 		});
 	}
 
@@ -137,6 +141,8 @@ class Slate {
 			type: "draw",
 			x: e.touches[0].clientX + this.origin.x,
 			y: e.touches[0].clientY + this.origin.y,
+			translate: { x: this.origin.x, y: this.origin.y },
+			scale: this.zoomLevel,
 		});
 	}
 

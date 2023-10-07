@@ -60,17 +60,20 @@ class Slate {
 
 		this.drawPaths.forEach((path) => {
 			this.ctx.save();
+
+			this.ctx.translate(this.origin.x, this.origin.y);
+			this.ctx.scale(this.zoomLevel, this.zoomLevel);
 			
 			switch (path.type) {
 				case "start":
-					this.ctx.translate(this.origin.x - path.translate.x, this.origin.y - path.translate.y);
-					this.ctx.scale(this.zoomLevel / path.scale, this.zoomLevel / path.scale);
+					this.ctx.translate(-path.translate.x, -path.translate.y);
+					this.ctx.scale(1 / path.scale, 1 / path.scale);
 					this.ctx.beginPath();
 					this.ctx.moveTo(path.x, path.y);
 					break;
-					case "draw":
-					this.ctx.translate(this.origin.x - path.translate.x, this.origin.y - path.translate.y);
-					this.ctx.scale(this.zoomLevel / path.scale, this.zoomLevel / path.scale);
+				case "draw":
+					this.ctx.translate(-path.translate.x, -path.translate.y);
+					this.ctx.scale(1 / path.scale, 1 / path.scale);
 					this.ctx.lineTo(path.x, path.y);
 					this.ctx.stroke();
 					break;
@@ -97,17 +100,15 @@ class Slate {
 	panMove(e) {
 		if (!this.isPanning) return;
 
-		const dx = e.clientX - this.panStartPos.x;
-		const dy = e.clientY - this.panStartPos.y;
+		this.origin.x += e.clientX - this.panStartPos.x;
+		this.origin.y += e.clientY - this.panStartPos.y;
 
-		// Adjust for the current zoom level
-		this.origin.x += dx;
-		this.origin.y += dy;
+		this.panStartPos = {
+			x: e.clientX,
+			y: e.clientY,
+		};
 
-		this.panStartPos.x = e.clientX;
-		this.panStartPos.y = e.clientY;
-
-		this.redraw(); // Update the canvas after panning
+		this.redraw();
 	}
 
 	panEnd(e) {
@@ -124,8 +125,8 @@ class Slate {
 
 		this.drawPaths.push({
 			type: "start",
-			x: e.touches[0].clientX + this.origin.x,
-			y: e.touches[0].clientY + this.origin.y,
+			x: e.touches[0].clientX,
+			y: e.touches[0].clientY,
 			translate: { x: this.origin.x, y: this.origin.y },
 			scale: this.zoomLevel,
 		});
@@ -139,8 +140,8 @@ class Slate {
 
 		this.drawPaths.push({
 			type: "draw",
-			x: e.touches[0].clientX + this.origin.x,
-			y: e.touches[0].clientY + this.origin.y,
+			x: e.touches[0].clientX,
+			y: e.touches[0].clientY,
 			translate: { x: this.origin.x, y: this.origin.y },
 			scale: this.zoomLevel,
 		});
@@ -156,7 +157,6 @@ class Slate {
 	zoom(e) {
 		e.preventDefault();
 
-		const prevZoomLevel = this.zoomLevel;
 		this.zoomLevel = Math.min(
 			Math.max(this.zoomLimit.lower, this.zoomLevel - e.deltaY * this.zoomSpeed),
 			this.zoomLimit.upper

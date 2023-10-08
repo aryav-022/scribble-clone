@@ -29,3 +29,8 @@ function toggleSidebar() {
 	const sidebar = document.querySelector(".sidebar");
 	sidebar.classList.toggle("hidden");
 }
+
+function shrinkSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.toggle("shrinked");
+}

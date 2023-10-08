@@ -89,9 +89,8 @@
 
 .sidebar {
     position: absolute;
-    top: 50%;
+    top: 10px;
     left: 20px;
-    translate: 0 -50%;
     background-color: var(--bg-secondary);
     border-radius: 20px;
     padding: 10px;
@@ -99,6 +98,7 @@
     min-width: 250px;
     opacity: 1;
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .sidebar .top {
@@ -107,13 +107,13 @@
     height: 50px;
     gap: 10px;
     padding: 5px;
-    border-bottom: 1px dashed var(--text-secondary);
+    border-bottom: 1px solid var(--text-secondary);
 }
 
 .sidebar .top .hamburger {
     background-color: transparent;
     border: none;
-    height: 22px;
+    height: 20px;
     aspect-ratio: 1/1;
     cursor: pointer;
 }
@@ -136,7 +136,7 @@
 .sidebar .cards {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 150px);
+    max-height: calc(100vh - 90px);
     overflow-y: auto;
     border-radius: 10px;
 }
@@ -182,6 +182,14 @@
 .sidebar.hidden {
     opacity: 0;
     left: -300px;
+}
+
+.sidebar.shrinked {
+    height: 210px;
+}
+
+.sidebar.shrinked .cards {
+    height: calc(100% - 60px);
 }
 
 .tools .toggle-sidebar-btn {

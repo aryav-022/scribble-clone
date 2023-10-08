@@ -110,7 +110,8 @@
     border-bottom: 1px solid var(--text-secondary);
 }
 
-.sidebar .top .hamburger {
+.sidebar .top .shrink-sidebar-btn {
+    position: relative;
     background-color: transparent;
     border: none;
     height: 20px;
@@ -118,14 +119,27 @@
     cursor: pointer;
 }
 
-.sidebar .top .hamburger svg {
+.sidebar .top .shrink-sidebar-btn svg {
     fill: var(--text-secondary);
     height: 100%;
     aspect-ratio: 1/1;
 }
 
-.sidebar .top .hamburger:hover svg {
+.sidebar .top .shrink-sidebar-btn:hover svg {
     fill: var(--text-primary);
+}
+
+.sidebar .top .shrink-sidebar-btn:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    padding: 5px 10px;
+    background-color: var(--bg-secondary);
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
 }
 
 .sidebar .top .title {
@@ -184,15 +198,11 @@
     left: -300px;
 }
 
-.sidebar.shrinked {
-    height: 210px;
-}
-
 .sidebar.shrinked .cards {
-    height: calc(100% - 60px);
+    max-height: 140px;
 }
 
-.tools .toggle-sidebar-btn {
+.toggle-sidebar-btn {
     position: relative;
     border: none;
     border-right: 1px solid var(--text-disabled);
@@ -204,7 +214,20 @@
     fill: var(--text-secondary);
 }
 
-.tools .toggle-sidebar-btn svg {
+.toggle-sidebar-btn svg {
     height: 20px;
     width: 20px;
+}
+
+.toggle-sidebar-btn:hover::after {
+    content: attr(data-tool);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    padding: 5px 10px;
+    background-color: var(--bg-secondary);
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
 }

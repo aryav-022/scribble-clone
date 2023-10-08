@@ -174,9 +174,28 @@ class Slate {
 
 	// Resize
 	resize() {
+		// Store the previous canvas size
+		const prevCanvasWidth = this.canvas.width;
+		const prevCanvasHeight = this.canvas.height;
+	
+		// Resize the canvas
 		this.canvas.height = window.innerHeight;
 		this.canvas.width = window.innerWidth;
-
-		this.redraw();
+	
+		// Calculate the change in canvas size
+		const deltaX = (this.canvas.width - prevCanvasWidth) / 2;
+		const deltaY = (this.canvas.height - prevCanvasHeight) / 2;
+	
+		// Adjust the origin to keep drawings centered
+		this.origin.x += deltaX;
+		this.origin.y += deltaY;
+	
+		// Update the canvas context for the new canvas size
+		this.ctx = this.canvas.getContext("2d");
+		this.ctx.strokeStyle = "#f1f1f1";
+		this.ctx.lineWidth = 2;
+		this.ctx.lineCap = "round";
+	
+		this.redraw(); // Redraw the canvas
 	}
 }

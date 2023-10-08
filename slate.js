@@ -66,13 +66,13 @@ class Slate {
 			
 			switch (path.type) {
 				case "start":
-					this.ctx.translate(-path.translate.x, -path.translate.y);
+					this.ctx.translate(-path.translate.x / path.scale, -path.translate.y / path.scale);
 					this.ctx.scale(1 / path.scale, 1 / path.scale);
 					this.ctx.beginPath();
 					this.ctx.moveTo(path.x, path.y);
 					break;
 				case "draw":
-					this.ctx.translate(-path.translate.x, -path.translate.y);
+					this.ctx.translate(-path.translate.x / path.scale, -path.translate.y / path.scale);
 					this.ctx.scale(1 / path.scale, 1 / path.scale);
 					this.ctx.lineTo(path.x, path.y);
 					this.ctx.stroke();

@@ -8,8 +8,71 @@
     display: block;
     background-color: #010101;
     cursor: grab;
+    touch-action: none;
 }
 
 #myCanvas.is-panning {
     cursor: grabbing;
+}
+
+.tools {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    translate: -50%;
+    background-color: #262627;
+    border-radius: 12px;
+}
+
+.tools .tool {
+    position: relative;
+    border: none;
+    padding: 7px 8px;
+    background-color: transparent;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 7px;
+    color: #9f9f9f;
+}
+
+.tools .tool.active {
+    background-color: #4f4d6f;
+}
+
+.tools .tool svg {
+    height: 20px;
+    width: 20px;
+}
+
+.tools .tool.disabled svg {
+    color: #5d5d5d;
+}
+
+.tools .tool:hover::after {
+    content: attr(data-tool);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    padding: 5px 10px;
+    background-color: #262627;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.tools .tool .key-number {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 2px 5px;
+    /* background-color: #4f4d6f; */
+    border-radius: 5px;
+    font-size: 8px;
+    color: #9f9f9f;
+    z-index: 1;
+}
+
+.tools .tool.disabled .key-number {
+    color: #5d5d5d;
 }

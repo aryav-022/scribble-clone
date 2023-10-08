@@ -26,25 +26,15 @@ class Slate {
 			upper: 5,
 		};
 
+		this.toolSelected = "Pan";
+
 		// Event listeners
 		{
-			// Panning
-			this.canvas.addEventListener("mousedown", this.panStart.bind(this));
-			this.canvas.addEventListener("mousemove", this.panMove.bind(this));
-			this.canvas.addEventListener("mouseup", this.panEnd.bind(this));
-			this.canvas.addEventListener("mouseleave", this.panEnd.bind(this));
-
-			// Drawing on Touch
-			this.canvas.addEventListener("touchstart", this.drawStart.bind(this));
-			this.canvas.addEventListener("touchmove", this.drawMove.bind(this));
-			this.canvas.addEventListener("touchend", this.drawEnd.bind(this));
-			this.canvas.addEventListener("touchcancel", this.drawEnd.bind(this));
-
-			// Drawing on Pen
-			this.canvas.addEventListener("pointerdown", this.drawStart.bind(this));
-			this.canvas.addEventListener("pointermove", this.drawMove.bind(this));
-			this.canvas.addEventListener("pointerup", this.drawEnd.bind(this));
-			this.canvas.addEventListener("pointerleave", this.drawEnd.bind(this));
+			// Pointer Events
+			this.canvas.addEventListener("pointerdown", this.startHandler.bind(this));
+			this.canvas.addEventListener("pointermove", this.moveHandler.bind(this));
+			this.canvas.addEventListener("pointerup", this.endHandler.bind(this));
+			this.canvas.addEventListener("pointerleave", this.endHandler.bind(this));
 
 			// Zoom
 			this.canvas.addEventListener("wheel", this.zoom.bind(this));
@@ -52,6 +42,23 @@ class Slate {
 			// Resize
 			window.addEventListener("resize", this.resize.bind(this));
 		}
+	}
+
+	// Functions to select appropriate functions according to tool selected
+	startHandler(e) {
+		if (this.toolSelected === "Pan") this.panStart(e);
+		if (this.toolSelected === "Pencil") this.drawStart(e);
+	}
+
+	moveHandler(e) {
+		e.preventDefault();
+		if (this.toolSelected === "Pan") this.panMove(e);
+		if (this.toolSelected === "Pencil") this.drawMove(e);
+	}
+
+	endHandler(e) {
+		if (this.toolSelected === "Pan") this.panEnd(e);
+		if (this.toolSelected === "Pencil") this.drawEnd(e);
 	}
 
 	// Redraw
@@ -121,12 +128,12 @@ class Slate {
 		this.isDrawing = true;
 
 		this.ctx.beginPath();
-		this.ctx.moveTo(e.touches[0].clientX, e.touches[0].clientY);
+		this.ctx.moveTo(e.clientX, e.clientY);
 
 		this.drawPaths.push({
 			type: "start",
-			x: e.touches[0].clientX,
-			y: e.touches[0].clientY,
+			x: e.clientX,
+			y: e.clientY,
 			translate: { x: this.origin.x, y: this.origin.y },
 			scale: this.zoomLevel,
 		});
@@ -135,13 +142,13 @@ class Slate {
 	drawMove(e) {
 		if (!this.isDrawing) return;
 
-		this.ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+		this.ctx.lineTo(e.clientX, e.clientY);
 		this.ctx.stroke();
 
 		this.drawPaths.push({
 			type: "draw",
-			x: e.touches[0].clientX,
-			y: e.touches[0].clientY,
+			x: e.clientX,
+			y: e.clientY,
 			translate: { x: this.origin.x, y: this.origin.y },
 			scale: this.zoomLevel,
 		});

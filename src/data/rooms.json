@@ -1,0 +1,31 @@
+{
+	"35950": {
+		"players": [
+			{
+				"id": 1,
+				"userName": "Player 1",
+				"avatar": "63902758"
+			},
+            {
+                "id": 2,
+                "userName": "Player 2",
+                "avatar": "38120689"
+            },
+            {
+                "id": 3,
+                "userName": "Player 3",
+                "avatar": "66904478"
+            },
+            {
+                "id": 4,
+                "userName": "Player 4",
+                "avatar": "2341055"
+            },
+            {
+                "id": 5,
+                "userName": "Player 5",
+                "avatar": "9934818"
+            }
+		]
+	}
+}

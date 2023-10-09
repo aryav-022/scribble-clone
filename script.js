@@ -24,13 +24,3 @@ window.addEventListener("keypress", (e) => {
 	if (key < "1" || key > "2") return;
 	changeTool(parseInt(key));
 });
-
-function toggleSidebar() {
-	const sidebar = document.querySelector(".sidebar");
-	sidebar.classList.toggle("hidden");
-}
-
-function shrinkSidebar() {
-    const sidebar = document.querySelector(".sidebar");
-    sidebar.classList.toggle("shrinked");
-}

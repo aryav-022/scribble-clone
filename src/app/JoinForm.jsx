@@ -3,48 +3,49 @@
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function JoinForm() {
+export default function JoinForm({ randomRoomId }) {
 	const router = useRouter();
 
 	const roomIdRef = useRef(null);
 	const userNameRef = useRef(null);
-	const copyToClipboardBtnRef = useRef(null);
 	const avatarRef = useRef(null);
+	const copyBtnRef = useRef(null);
 
 	function copyToClipboard() {
-		copyToClipboardBtnRef.current.innerHTML = "Copied!";
+		copyBtnRef.current.classList.remove("after:hidden");
+		setTimeout(() => {
+			copyBtnRef.current.classList.add("after:hidden");
+		}, 2000);
 		navigator.clipboard.writeText(randomRoomId);
 	}
 
 	function joinRoom() {
-		const roomId = roomIdRef.current.value || copyToClipboardBtnRef.current.textContent;
+		const roomId = roomIdRef.current.value || randomRoomId;
 		const userName = userNameRef.current.value;
-        
-        if (userName === "") {
-            userNameRef.current.focus();
-            return;
-        }
+
+		if (userName === "") {
+			userNameRef.current.focus();
+			return;
+		}
 
 		router.push(`/waiting-room?roomId=${roomId}&userName=${userName}`);
 	}
 
-	useEffect(() => {		
-		const randomRoomId = parseInt(Math.random() * 1e5);
-		avatarRef.current.src = `https://api.dicebear.com/7.x/big-smile/svg?seed=${randomRoomId}`;
-		copyToClipboardBtnRef.current.textContent = randomRoomId;
-	}, []);
+	function changeAvatar() {
+		avatarRef.current.src = `https://api.dicebear.com/7.x/big-smile/svg?seed=${Math.random()}`;
+	}
 
 	return (
 		<div className="flex flex-wrap mt-16 justify-center gap-16">
 			{/* Profile Section */}
-			<div className="flex flex-col gap-4 p-8 rounded-3xl w-fit bg-secondary bg-opacity-70 max-sm:scale-90">
+			<div className="flex flex-col gap-4 p-8 w-fit rounded-3xl bg-secondary bg-opacity-70 max-sm:scale-90">
 				<h1 className="text-3xl">Profile</h1>
 				<div className="flex items-center max-sm:flex-col max-sm:items-start">
 					<label htmlFor="username" className="text-xl mr-4 after:content-['*'] after:text-red-400">
 						Username
 					</label>
 					<input
-                        ref={userNameRef}
+						ref={userNameRef}
 						type="text"
 						id="username"
 						name="userName"
@@ -53,29 +54,26 @@ export default function JoinForm() {
 						className="py-2 px-4 bg-secondary bg-opacity-80 rounded"
 					/>
 				</div>
-				<div className="flex flex-col gap-2">
-					<label htmlFor="username" className="text-xl mr-4">
-						Avatar
-					</label>
-					<div className="flex items-center max-sm:flex-col">
-						<img
-							ref={avatarRef}
-							src="https://api.dicebear.com/7.x/big-smile/svg"
-							alt=""
-							className="block h-16 w-16 rounded-full mr-4"
-						/>
-						<input
-							type="file"
-							className="block w-full text-sm text-secondary
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-full file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-secondary file:text-primary
-                                hover:file:bg-secondary hover:file:bg-opacity-80
-                                file:cursor-pointer
-                            "
-						/>
-					</div>
+				<div className="flex gap-2 items-center">
+					<label htmlFor="avatar" className="text-xl">Your Avatar</label>
+					<img
+						ref={avatarRef}
+						src={`https://api.dicebear.com/7.x/big-smile/svg?seed=${Math.random()}`}
+						alt=""
+						height={128}
+						width={128}
+						className="mr-4"
+					/>
+					<button onClick={changeAvatar}>
+						<svg
+							className="fill-primary h-8 aspect-square -scale-x-100 cursor-pointer"
+							xmlns="http://www.w3.org/2000/svg"
+							height="1em"
+							viewBox="0 0 512 512"
+						>
+							<path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z" />
+						</svg>
+					</button>
 				</div>
 			</div>
 
@@ -96,10 +94,11 @@ export default function JoinForm() {
 					<h1 className="text-xl">Create Room</h1>
 					<div className="">
 						<button
+							ref={copyBtnRef}
 							onClick={copyToClipboard}
-							className="flex w-full justify-between items-center text-opacity-80 hover:text-opacity-100 text-lg text-disabled bg-primary bg-opacity-40 px-4 py-2 rounded-xl"
-							>
-							<span ref={copyToClipboardBtnRef}></span>
+							className="relative flex w-full gap-2 items-center text-opacity-80 hover:text-opacity-100 text-lg text-disabled bg-primary bg-opacity-40 px-4 py-2 rounded-xl after:absolute after:content-['copied!'] after:text-primary after:bottom-0 after:right-0 after:text-sm after:bg-primary after:bg-opacity-30 after:py-1 after:px-2 after:rounded-md after:hidden"
+						>
+							{randomRoomId}
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className="fill-disabled"

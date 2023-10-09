@@ -1,11 +1,16 @@
+// Client Components
 import JoinForm from "./JoinForm";
 
+import { v4 as uuidv4 } from "uuid";
+
 export default async function Home() {
+	const unique = uuidv4();
+
 	return (
 		<div className="relative h-screen w-screen overflow-x-hidden overflow-y-auto">
 			<main className="p-8">
 				<h1 className="w-fit text-5xl mx-auto max-sm:text-4xl">Scribble Clone</h1>
-				<JoinForm />
+				<JoinForm randomRoomId={unique} />
 			</main>
 
 			<img

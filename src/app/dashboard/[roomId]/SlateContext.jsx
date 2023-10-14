@@ -1,7 +1,7 @@
 "use client";
 
-import Slate from '../libraries/Slate';
-import { createContext, useContext, useEffect, useState, useRef } from 'react';
+import Slate from "../../../libraries/Slate";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 
 const SlateContext = createContext();
 

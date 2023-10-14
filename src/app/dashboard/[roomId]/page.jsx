@@ -12,8 +12,9 @@ import Sidebar from "./Sidebar";
 // Client Components
 import SlateContextProvider from "./SlateContext"; 
 
-export default async function Page({ searchParams }) {
-	const { roomId, userName } = searchParams;
+export default async function Page({ params, searchParams }) {
+	const { roomId } = params;
+	const { userName, avatar } = searchParams;
 
 	const filePath = path.join(process.cwd(), "src", "data", "rooms.json");
 	const fileData = await fs.readFile(filePath, "utf8");
